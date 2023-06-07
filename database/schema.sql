@@ -5,3 +5,90 @@ set client_min_messages to warning;
 drop schema "public" cascade;
 
 create schema "public";
+CREATE TABLE "public"."Products" (
+	"productId" serial NOT NULL,
+	"name" TEXT NOT NULL,
+	"description" TEXT NOT NULL,
+	"stock" int NOT NULL,
+	"price" money NOT NULL,
+	CONSTRAINT "Products_pk" PRIMARY KEY ("productId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."Users" (
+	"userId" serial NOT NULL,
+	"firstName" TEXT NOT NULL,
+	"lastName" TEXT NOT NULL,
+	"emailAddress" TEXT NOT NULL,
+	"hashedPassword" TEXT NOT NULL,
+	"cartId" int NOT NULL,
+	CONSTRAINT "Users_pk" PRIMARY KEY ("userId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."Carts" (
+	"cartId" serial NOT NULL,
+	"userId" int NOT NULL,
+	"totalCartPrice" money NOT NULL,
+	CONSTRAINT "Carts_pk" PRIMARY KEY ("cartId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."Cart Items" (
+	"itemId" serial NOT NULL,
+	"productId" int NOT NULL,
+	"cartId" int NOT NULL,
+	"image" TEXT NOT NULL,
+	"name" TEXT NOT NULL,
+	"quantity" int NOT NULL,
+	"price" money NOT NULL,
+	"totalPrice" money NOT NULL,
+	CONSTRAINT "Cart Items_pk" PRIMARY KEY ("itemId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."Orders" (
+	"orderId" int NOT NULL,
+	"userId" int NOT NULL,
+	"cartId" int NOT NULL
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."Images" (
+	"imageId" serial NOT NULL,
+	"productId" int NOT NULL,
+	"image" serial NOT NULL,
+	CONSTRAINT "Images_pk" PRIMARY KEY ("imageId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+
+
+ALTER TABLE "Carts" ADD CONSTRAINT "Carts_fk0" FOREIGN KEY ("cartId") REFERENCES "Users"("cartId");
+ALTER TABLE "Carts" ADD CONSTRAINT "Carts_fk1" FOREIGN KEY ("userId") REFERENCES "Users"("userId");
+
+ALTER TABLE "Cart Items" ADD CONSTRAINT "Cart Items_fk0" FOREIGN KEY ("productId") REFERENCES "Products"("productId");
+ALTER TABLE "Cart Items" ADD CONSTRAINT "Cart Items_fk1" FOREIGN KEY ("cartId") REFERENCES "Carts"("cartId");
+
+ALTER TABLE "Orders" ADD CONSTRAINT "Orders_fk0" FOREIGN KEY ("userId") REFERENCES "Users"("userId");
+ALTER TABLE "Orders" ADD CONSTRAINT "Orders_fk1" FOREIGN KEY ("cartId") REFERENCES "Carts"("cartId");
+
+ALTER TABLE "Images" ADD CONSTRAINT "Images_fk0" FOREIGN KEY ("productId") REFERENCES "Products"("productId");
