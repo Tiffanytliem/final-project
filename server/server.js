@@ -26,6 +26,45 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello, World!' });
 });
 
+app.get('/api/products', async (req, res, next) => {
+  try {
+    const sql = `
+      SELECT
+        "Products"."name",
+        "Products"."price",
+        "Images"."image"
+      FROM
+        "Products"
+      JOIN
+        "Images"
+      USING
+        ("productId");
+    `;
+    const result = await db.query(sql);
+
+    // post-processing
+    const productMap = {};
+    result.rows.forEach((row) => {
+      // if the product is not yet in the map, add it
+      if (!productMap[row.name]) {
+        productMap[row.name] = {
+          name: row.name,
+          price: row.price,
+          images: [row.image],
+        };
+      }
+      // otherwise, just append the image
+      else {
+        productMap[row.name].images.push(row.image);
+      }
+    });
+    // convert map to array
+    const productsArray = Object.values(productMap);
+    res.json(productsArray);
+  } catch (err) {
+    next(err);
+  }
+});
 /**
  * Serves React's index.html if no api route matches.
  *
