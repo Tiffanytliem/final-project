@@ -30,6 +30,7 @@ app.get('/api/products', async (req, res, next) => {
   try {
     const sql = `
       SELECT
+        "Products"."productId",
         "Products"."name",
         "Products"."price",
         "Images"."image"
@@ -48,6 +49,7 @@ app.get('/api/products', async (req, res, next) => {
       // if the product is not yet in the map, add it
       if (!productMap[row.name]) {
         productMap[row.name] = {
+          productId: row.productId,
           name: row.name,
           price: row.price,
           images: [row.image],
