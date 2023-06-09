@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Crimson Text', sans-serif;
+  margin: 26px;
+  font-size: 18px;
+  line-height: 24px;
+  background-color: #fbf9f7;
+}
+
+.catalog-intro {
+  background-color: #f7ecde;
+  text-align: center;
+  height: 200px;
+}
+
+p {
+  margin: 0;
+}
+
+.card-price {
+  margin-bottom: 10px;
+}
+
+.card-body {
+  font-size: 18px;
+  line-height: 24px;
+  color: black;
+  padding: 0;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.column-full {
+  flex-basis: 100%;
+}
+
+.column-half {
+  flex-basis: 47%;
+}
+
+.image {
+  margin: 10px 0;
+  max-width: 100%;
+  object-fit: contain;
+}

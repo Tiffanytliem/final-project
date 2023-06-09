@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import fetchCatalog from '../lib/api';
-import './Catalog.css';
+import '../styles.css';
 import { Link } from 'react-router-dom';
 
 export default function Catalog() {
@@ -22,11 +22,18 @@ export default function Catalog() {
   if (error) return <div>ErrorLoading Catalog: {error.message}</div>;
   return (
     <div className="container">
-      <h1>Shop All</h1>
+      <div className="row">
+        <div className="catalog-intro column-full">
+          <h2 className="shop-all">Shop All</h2>
+          <div className="catalog-desc">
+            <p>A collection of items that enhance your everyday routine.</p>
+          </div>
+        </div>
+      </div>
       <hr />
       <div className="row">
         {products?.map((product) => (
-          <div key={product.productId} className="col-12 col-md-6 col-lg-4">
+          <div key={product.productId} className="column-half">
             <Product product={product} />
           </div>
         ))}
@@ -40,14 +47,13 @@ function Product({ product }) {
   const image = product.images[0];
   console.log(product);
   return (
-    <Link
-      to={`details/${productId}`}>
-        <div>
-      <img src={image} className="image card-img-top" alt={name} />
-      <div className="card-body">
-        <h5 className="card-title">{name}</h5>
-        <p className="card-text">{price}</p>
-      </div>
+    <Link to={`details/${productId}`}>
+      <div>
+        <img src={image} className="image" alt={name} />
+        <div className="card-body">
+          <p>{name}</p>
+          <p className="card-price">{price}</p>
+        </div>
       </div>
     </Link>
   );
