@@ -1,7 +1,13 @@
+body{
+font-family: 'Crimson Text',
+  sans-serif;
+}
+
+/*
 .product {
   display: block;
   cursor: pointer;
-}
+} */
 
 .image {
   height: 300px;

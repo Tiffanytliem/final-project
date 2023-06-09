@@ -40,11 +40,14 @@ function Product({ product }) {
   const image = product.images[0];
   console.log(product);
   return (
-    <Link to={`details/${productId}`}>
+    <Link
+      to={`details/${productId}`}>
+        <div>
       <img src={image} className="image card-img-top" alt={name} />
       <div className="card-body">
         <h5 className="card-title">{name}</h5>
-        <p className="card-text text-secondary">{price}</p>
+        <p className="card-text">{price}</p>
+      </div>
       </div>
     </Link>
   );
