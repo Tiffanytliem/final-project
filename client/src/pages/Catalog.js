@@ -23,7 +23,6 @@ export default function Catalog() {
   if (error) return <div>ErrorLoading Catalog: {error.message}</div>;
   return (
     <div className="container">
-      <hr class="top-hr" />
       <div className="row">
         <div className="catalog-intro column-full">
           <p className="shop-all">Shop All</p>

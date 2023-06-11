@@ -7,13 +7,13 @@ export default function Footer(props) {
     <div>
       <div className="footer">
         <Link to="/About">
-          <li className="footer-item">About</li>
+          <p className="footer-item">About</p>
         </Link>
         <Link to="/Terms">
-          <li className="footer-item">Terms of Service</li>
+          <p className="footer-item">Terms of Service</p>
         </Link>
         <Link to="/Policy">
-          <li className="footer-item">Privacy Policy</li>
+          <p className="footer-item">Privacy Policy</p>
         </Link>
       </div>
       <Outlet></Outlet>

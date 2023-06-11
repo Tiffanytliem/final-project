@@ -11,18 +11,42 @@ body {
   background-color: #fbf9f7;
 }
 
+.navbar-collapse {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  height: 10vh;
+  padding-bottom: 0;
+  background-color: #fbf9f7;
+}
+
+.bi {
+  color: black;
+  padding: 0;
+}
+
+.bi-list {
+  font-size: 32px;
+}
+
+.bi-person {
+  font-size: 30px;
+}
+
+.bi-bag {
+  font-size: 24px;
+  margin: 10px;
+}
+
 .top-hr {
   width: 100%;
   margin: 0;
   color: black 1px;
 }
 
-.footer,
-.navbar {
-  list-style-type: none;
-}
-
 .catalog-intro {
+  margin-top: 10vh;
   background-color: #f7ecde;
   height: 200px;
   margin-bottom: 10px;
