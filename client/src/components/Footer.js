@@ -4,16 +4,16 @@ import { Link, Outlet } from 'react-router-dom';
 export default function Footer(props) {
   console.log(props);
   return (
-    <div>
+    <div className="footer-container">
       <div className="footer">
-        <Link to="/About">
-          <p className="footer-item">About</p>
+        <Link to="/About" className="footer-item">
+          <p>About</p>
         </Link>
-        <Link to="/Terms">
-          <p className="footer-item">Terms of Service</p>
+        <Link to="/Terms" className="footer-item">
+          <p>Terms of Service</p>
         </Link>
-        <Link to="/Policy">
-          <p className="footer-item">Privacy Policy</p>
+        <Link to="/Policy" className="footer-item">
+          <p>Privacy Policy</p>
         </Link>
       </div>
       <Outlet></Outlet>

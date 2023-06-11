@@ -22,25 +22,42 @@ export default function Catalog() {
 
   if (error) return <div>ErrorLoading Catalog: {error.message}</div>;
   return (
-    <div className="container">
-      <div className="row">
-        <div className="catalog-intro column-full">
-          <p className="shop-all">Shop All</p>
-          <br />
-          <div className="catalog-desc">
-            <p>A collection of items that enhance your everyday routine.</p>
+    <div>
+      <div className="container">
+        <div className="row mobile">
+          <div className="catalog-intro column-full">
+            <p className="shop-all">Shop All</p>
+            <br />
+            <div className="catalog-desc">
+              <p>A collection of items that enhance your everyday routine.</p>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="row">
-        {products?.map((product) => (
-          <div key={product.productId} className="column-half">
-            <Product product={product} />
+
+        <div className="desktop intro">
+          <div className="catalog-intro intro-column-half">
+            <p className="shop-all">Shop All</p>
+            <br />
+            <div className="catalog-desc">
+              <p>A collection of items that enhance your everyday routine.</p>
+            </div>
           </div>
-        ))}
+          <div className="intro-column-half">
+            <img
+              className="intro-img"
+              src="/images/Intro.webp"
+              alt="Intro"></img>
+          </div>
+        </div>
+        <div className="row">
+          {products?.map((product) => (
+            <div key={product.productId} className="column-half">
+              <Product product={product} />
+            </div>
+          ))}
+        </div>
       </div>
-      <hr className="hr-footer" />
-      <div className="row">
+      <div className="row hr-footer">
         <Footer />
       </div>
     </div>
