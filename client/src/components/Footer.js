@@ -6,13 +6,13 @@ export default function Footer(props) {
   return (
     <div className="footer-container">
       <div className="footer">
-        <Link to="/About" className="footer-item">
+        <Link to="/about" className="footer-item">
           <p>About</p>
         </Link>
-        <Link to="/Terms" className="footer-item">
+        <Link to="/terms" className="footer-item">
           <p>Terms of Service</p>
         </Link>
-        <Link to="/Policy" className="footer-item">
+        <Link to="/policy" className="footer-item">
           <p>Privacy Policy</p>
         </Link>
       </div>

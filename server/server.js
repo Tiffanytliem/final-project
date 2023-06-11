@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
+import ClientError from './lib/client-error.js';
 
 // eslint-disable-next-line no-unused-vars -- Remove when used
 const db = new pg.Pool({
@@ -33,40 +34,56 @@ app.get('/api/products', async (req, res, next) => {
         "Products"."productId",
         "Products"."name",
         "Products"."price",
-        "Images"."image"
+        ARRAY_AGG("Images"."image" ORDER BY "Images"."imageId") AS images
       FROM
         "Products"
       JOIN
         "Images"
       USING
-        ("productId");
+        ("productId")
+      GROUP BY
+        "Products"."productId",
+        "Products"."name",
+        "Products"."price";
     `;
     const result = await db.query(sql);
-
-    // post-processing
-    const productMap = {};
-    result.rows.forEach((row) => {
-      // if the product is not yet in the map, add it
-      if (!productMap[row.name]) {
-        productMap[row.name] = {
-          productId: row.productId,
-          name: row.name,
-          price: row.price,
-          images: [row.image],
-        };
-      }
-      // otherwise, just append the image
-      else {
-        productMap[row.name].images.push(row.image);
-      }
-    });
-    // convert map to array
-    const productsArray = Object.values(productMap);
-    res.json(productsArray);
+    res.json(result.rows);
   } catch (err) {
     next(err);
   }
 });
+
+app.get('/api/products/:productId', async(req, res,next) => {
+  const productId = Number(req.params.productId);
+  try {
+    const sql = `
+      SELECT
+        "Products"."productId",
+        "Products"."name",
+        "Products"."price",
+        "Products"."description",
+        ARRAY_AGG("Images"."image" ORDER BY "Images"."imageId") AS images
+      FROM
+        "Products"
+      JOIN
+        "Images"
+      USING
+        ("productId")
+      WHERE
+        "productId" = $1
+      GROUP BY
+        "Products"."productId",
+        "Products"."name",
+        "Products"."price",
+        "Products"."description"
+    `;
+    const result = await db.query(sql, [productId]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
 /**
  * Serves React's index.html if no api route matches.
  *
