@@ -1,0 +1,205 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Crimson Text', sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  background-color: #fbf9f7;
+}
+
+.container {
+  margin: 25px auto 5vh;
+  width: 85%;
+}
+
+.desktop {
+  display: none;
+}
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  height: 75px;
+  padding-bottom: 0;
+  background-color: #fbf9f7;
+  border-bottom: solid 1px;
+}
+
+.bi {
+  color: black;
+  padding: 0;
+}
+
+.bi-list {
+  position: fixed;
+  top: 25px;
+  left: 7%;
+  font-size: 32px;
+}
+
+.bi-person {
+  position: fixed;
+  top: 25px;
+  right: 20%;
+  font-size: 30px;
+}
+
+.bi-bag {
+  position: fixed;
+  top: 25px;
+  right: 8%;
+  font-size: 24px;
+}
+
+.top-hr {
+  width: 100%;
+  margin: 0;
+  color: black 1px;
+}
+
+.catalog-intro {
+  margin-top: 50px;
+  background-color: #f7ecde;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.shop-all {
+  font-size: 35px;
+  margin-top: 38px;
+  text-align: center;
+}
+
+.catalog-desc {
+  padding: 0 40px;
+}
+
+link {
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+}
+
+.card-price {
+  margin-bottom: 10px;
+}
+
+.card-body,
+.footer-item {
+  font-size: 18px;
+  line-height: 24px;
+  color: black;
+  padding: 0;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.column-full {
+  flex-basis: 100%;
+}
+
+.column-half {
+  flex-basis: 47%;
+}
+
+.image {
+  margin: 10px 0;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.hr-footer {
+  margin-top: 30px;
+  border-top: solid 0.5px;
+  padding: 20px 7.5%;
+}
+
+@media only screen and (width >= 1152px) {
+  .mobile {
+    display: none;
+  }
+
+  .desktop.shop,
+  .desktop.about {
+    display: flex;
+    position: fixed;
+    top: 32px;
+    font-size: 20px;
+    color: black;
+  }
+
+  .desktop.shop {
+    right: 30%;
+  }
+
+  .desktop.about {
+    right: 22%;
+  }
+
+  .bi-person {
+    right: 15%;
+  }
+
+  .column-half {
+    flex-basis: 22%;
+  }
+
+  .footer-container {
+    width: 100%;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+
+  .footer-item {
+    flex-basis: auto;
+  }
+
+  .intro-column-half {
+    flex-basis: 50%;
+  }
+
+  .desktop.intro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 50px;
+    background-color: #f7ecde;
+    height: 315px;
+    margin-bottom: 50px;
+  }
+
+  .intro-img {
+    width: 100%;
+    height: 315px;
+    object-fit: cover;
+  }
+
+  .shop-all {
+    font-size: 35px;
+    margin-top: 70px;
+    margin-left: 40px;
+    text-align: left;
+  }
+
+  .catalog-desc {
+    padding: 0 40px;
+  }
+}
