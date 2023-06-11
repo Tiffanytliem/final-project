@@ -4,16 +4,42 @@
 
 body {
   font-family: 'Crimson Text', sans-serif;
-  margin: 26px;
+  margin: 26px auto;
+  width: 85%;
   font-size: 18px;
   line-height: 24px;
   background-color: #fbf9f7;
 }
 
+.top-hr {
+  width: 100%;
+  margin: 0;
+  color: black 1px;
+}
+
+.footer,
+.navbar {
+  list-style-type: none;
+}
+
 .catalog-intro {
   background-color: #f7ecde;
-  text-align: center;
   height: 200px;
+  margin-bottom: 10px;
+}
+
+.shop-all {
+  font-size: 35px;
+  margin-top: 38px;
+  text-align: center;
+}
+
+.catalog-desc {
+  padding: 0 40px;
+}
+
+link {
+  text-decoration: none;
 }
 
 p {
@@ -24,7 +50,8 @@ p {
   margin-bottom: 10px;
 }
 
-.card-body {
+.card-body,
+.footer-item {
   font-size: 18px;
   line-height: 24px;
   color: black;
@@ -53,4 +80,8 @@ a:link {
   margin: 10px 0;
   max-width: 100%;
   object-fit: contain;
+}
+
+.hr-footer {
+  margin-top: 20px;
 }

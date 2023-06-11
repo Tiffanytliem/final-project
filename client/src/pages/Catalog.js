@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import fetchCatalog from '../lib/api';
 import '../styles.css';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 export default function Catalog() {
   const [products, setProducts] = useState();
@@ -22,21 +23,26 @@ export default function Catalog() {
   if (error) return <div>ErrorLoading Catalog: {error.message}</div>;
   return (
     <div className="container">
+      <hr class="top-hr" />
       <div className="row">
         <div className="catalog-intro column-full">
-          <h2 className="shop-all">Shop All</h2>
+          <p className="shop-all">Shop All</p>
+          <br />
           <div className="catalog-desc">
             <p>A collection of items that enhance your everyday routine.</p>
           </div>
         </div>
       </div>
-      <hr />
       <div className="row">
         {products?.map((product) => (
           <div key={product.productId} className="column-half">
             <Product product={product} />
           </div>
         ))}
+      </div>
+      <hr className="hr-footer" />
+      <div className="row">
+        <Footer />
       </div>
     </div>
   );
