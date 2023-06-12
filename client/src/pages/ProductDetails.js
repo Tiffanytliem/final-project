@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchProduct } from '../lib/api';
 import { Link, useParams } from 'react-router-dom';
 import '../styles.css';
+import Footer from '../components/Footer';
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -37,13 +38,14 @@ export default function ProductDetails() {
   if (!product) return null;
   const { name, images, price, description } = product;
   return (
-    <div className="container">
-      <div className="row">
-        <div className="img-col-2-thrd">
-          <div className="row">
-            <img src={images[0]} alt={name} className="image" />
-          </div>
-          {/* <div className="row">
+    <div>
+      <div className="container">
+        <div className="row">
+          <div className="img-col-2-thrd">
+            <div className="row">
+              <img src={images[0]} alt={name} className="image" />
+            </div>
+            {/* <div className="row">
             <div className="img-col-1-fifth">
               <img src={images[1]} alt={name} className="image" />
             </div>
@@ -57,21 +59,25 @@ export default function ProductDetails() {
               <img src={images[4]} alt={name} className="image" />
             </div>
           </div> */}
+          </div>
+          <div className="desc-col-1-thrd">
+            <div className="row">
+              <p className="detail-title">{name}</p>
+            </div>
+            <div className="row">
+              <p className="detail-price">{price}</p>
+            </div>
+            <div className="row">
+              <button className="add-to-cart">Add to Cart</button>
+            </div>
+            <div className="row">
+              <p className="detail-desc">{description}</p>
+            </div>
+          </div>
         </div>
-        <div className="desc-col-1-thrd">
-          <div className="row">
-            <h2>{name}</h2>
-          </div>
-          <div className="row">
-            <p className="detail-price">{price}</p>
-          </div>
-          <div className="row">
-            <button className="add-to-cart">Add to Cart</button>
-          </div>
-          <div className="row">
-            <p className="detail-desc">{description}</p>
-          </div>
-        </div>
+      </div>
+      <div className="row hr-footer">
+        <Footer />
       </div>
     </div>
   );
