@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import argon2 from 'argon2';
 import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
 import ClientError from './lib/client-error.js';
@@ -84,6 +85,26 @@ app.get('/api/products/:productId', async(req, res,next) => {
   }
 });
 
+app.post('/api/auth/sign-up', async (req, res, next) => {
+  try {
+    const {firstName, lastName, email, password} = req.body;
+    if (!firstName || !lastName || !email || !password) {
+      throw new ClientError(400, 'All fields are required');
+    }
+    const sql = `
+      insert into "Users"
+          ("firstName", "lastName", "emailAddress", "hashedPassword")
+          values ($1, $2, $3, $4)
+          returning *
+          `;
+
+    const hash = await argon2.hash('password');
+    const result = await db.query (sql, [firstName, lastName, email, hash]);
+    res.status(201).json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
 /**
  * Serves React's index.html if no api route matches.
  *

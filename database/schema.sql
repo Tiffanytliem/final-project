@@ -25,7 +25,6 @@ CREATE TABLE "public"."Users" (
 	"lastName" TEXT NOT NULL,
 	"emailAddress" TEXT NOT NULL,
 	"hashedPassword" TEXT NOT NULL,
-	"cartId" int NOT NULL,
 	CONSTRAINT "Users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
