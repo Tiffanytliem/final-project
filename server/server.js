@@ -3,6 +3,7 @@ import express from 'express';
 import argon2 from 'argon2';
 import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
+import jwt from 'jsonwebtoken';
 import ClientError from './lib/client-error.js';
 
 // eslint-disable-next-line no-unused-vars -- Remove when used
@@ -87,24 +88,57 @@ app.get('/api/products/:productId', async(req, res,next) => {
 
 app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
-    const {firstName, lastName, email, password} = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    const {email, password} = req.body;
+    if (!email || !password) {
       throw new ClientError(400, 'All fields are required');
     }
     const sql = `
       insert into "Users"
-          ("firstName", "lastName", "emailAddress", "hashedPassword")
-          values ($1, $2, $3, $4)
+           "emailAddress", "hashedPassword")
+          values ($1, $2)
           returning *
           `;
 
     const hash = await argon2.hash('password');
-    const result = await db.query (sql, [firstName, lastName, email, hash]);
+    const result = await db.query (sql, [email, hash]);
     res.status(201).json(result.rows);
   } catch (err) {
     next(err);
   }
 });
+
+app.post('/api/auth/sign-in', async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new ClientError(401, 'invalid login');
+    }
+    const sql = `
+      select "userId",
+            "hashedPassword"
+        from "users"
+        where "emailAddress" = $1
+    `;
+    const params = [email];
+    const result = await db.query(sql, params);
+    const [user] = result.rows;
+    if (!user) {
+      throw new ClientError(401, 'invalid login');
+    }
+    const { userId, hashedPassword } = user;
+    const isMatching = await argon2.verify(hashedPassword, password);
+    if (!isMatching) {
+      throw new ClientError(401, 'invalid login');
+    }
+    const payload = { userId, email };
+    const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+    res.json({ token, user: payload });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 /**
  * Serves React's index.html if no api route matches.
  *
