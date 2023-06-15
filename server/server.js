@@ -116,7 +116,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     const sql = `
       select "userId",
             "hashedPassword"
-        from "users"
+        from "Users"
         where "emailAddress" = $1
     `;
     const params = [email];
