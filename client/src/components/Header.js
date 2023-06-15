@@ -1,7 +1,10 @@
 import '../styles.css';
 import { Link, Outlet } from 'react-router-dom';
+import React, { useContext } from 'react';
+import AppContext from '../components/AppContext';
 
 export default function Header(props) {
+  // const {user, handleSignOut} = useContext(AppContext);
   console.log(props);
   return (
     <div>
