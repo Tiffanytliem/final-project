@@ -1,70 +1,34 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signUpOrIn } from '../lib/api';
+/* eslint-disable no-unused-vars -- Remove me */
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AuthForm from '../components/AuthForm.js';
+import AppContext from '../components/AppContext.js';
 
-export default function AuthForm({ action, onSignIn }) {
+export default function AuthPage({ action }) {
   const navigate = useNavigate();
-  const [error, setError] = useState();
+  const {user, handleSignIn} = useContext(AppContext);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const { username, password } = Object.fromEntries(formData.entries());
-    try {
-      const result = await signUpOrIn(action, username, password);
-      if (action === 'sign-up') {
-        navigate('/sign-in');
-      } else if (result.user && result.token) {
-        onSignIn(result);
-      }
-    } catch (err) {
-      setError(err);
-    }
-  }
+  useEffect(() => {
+    if (user) navigate('/');
+  }, [user, navigate])
 
-  const alternateActionTo = action === 'sign-up'
-    ? '/sign-in'
-    : '/sign-up';
-  const alternateActionText = action === 'sign-up'
-    ? 'Sign in instead'
-    : 'Register now';
-  const submitButtonText = action === 'sign-up'
-    ? 'Register'
-    : 'Log In';
+  const welcomeMessage = action === 'sign-in' ? 'Please sign in to continue'  : 'Create an account to get started!';
   return (
-    <form className="w-100" onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label className="form-label">
-          Username:
-          <input
-            required
-            autoFocus
-            type="text"
-            name="username"
-            className="form-control bg-light" />
-        </label>
+    <div>
+      <div>
+        <header>
+          <h2>
+            Account
+          </h2>
+          <p>{welcomeMessage}</p>
+        </header>
+        <div>
+          <AuthForm
+            key={action}
+            action={action}
+            onSignIn={handleSignIn} />
+        </div>
       </div>
-      <div className="mb-3">
-        <label className="form-label">
-          Password:
-          <input
-            required
-            type="password"
-            name="password"
-            className="form-control bg-light" />
-        </label>
-      </div>
-      <div className="d-flex justify-content-between align-items-center">
-        <small>
-          <Link className="text-muted" to={alternateActionTo}>
-            {alternateActionText}
-          </Link>
-        </small>
-        <button type="submit" className="btn btn-primary">
-          {submitButtonText}
-        </button>
-      </div>
-      {error && <div style={{ color: 'red' }}>Error: {error.message}</div>}
-    </form>
+    </div>
   );
 }

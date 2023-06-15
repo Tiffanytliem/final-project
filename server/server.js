@@ -94,12 +94,12 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
     }
     const sql = `
       insert into "Users"
-           "emailAddress", "hashedPassword")
+           ("emailAddress", "hashedPassword")
           values ($1, $2)
           returning *
           `;
 
-    const hash = await argon2.hash('password');
+    const hash = await argon2.hash(password);
     const result = await db.query (sql, [email, hash]);
     res.status(201).json(result.rows);
   } catch (err) {
@@ -127,8 +127,11 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     }
     const { userId, hashedPassword } = user;
     const isMatching = await argon2.verify(hashedPassword, password);
+    console.log(hashedPassword);
+    console.log(await argon2.hash('password'));
     if (!isMatching) {
-      throw new ClientError(401, 'invalid login');
+      throw new ClientError(401, 'wrong password');
+
     }
     const payload = { userId, email };
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);

@@ -9,9 +9,9 @@ export default function AuthForm({ action, onSignIn }) {
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    const { username, password } = Object.fromEntries(formData.entries());
+    const { email, password } = Object.fromEntries(formData.entries());
     try {
-      const result = await signUpOrIn(action, username, password);
+      const result = await signUpOrIn(action, email, password);
       if (action === 'sign-up') {
         navigate('/sign-in');
       } else if (result.user && result.token) {
@@ -32,39 +32,37 @@ export default function AuthForm({ action, onSignIn }) {
     ? 'Register'
     : 'Log In';
   return (
-    <form className="w-100" onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label className="form-label">
-          Username:
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>
+          Email:
           <input
             required
             autoFocus
             type="text"
-            name="username"
-            className="form-control bg-light" />
+            name="email" />
         </label>
       </div>
-      <div className="mb-3">
-        <label className="form-label">
+      <div>
+        <label>
           Password:
           <input
             required
             type="password"
-            name="password"
-            className="form-control bg-light" />
+            name="password" />
         </label>
       </div>
-      <div className="d-flex justify-content-between align-items-center">
+      <div>
         <small>
-          <Link className="text-muted" to={alternateActionTo}>
+          <Link to={alternateActionTo}>
             {alternateActionText}
           </Link>
         </small>
-        <button type="submit" className="btn btn-primary">
+        <button>
           {submitButtonText}
         </button>
       </div>
-      {error && <div style={{ color: 'red' }}>Error: {error.message}</div>}
+      {error && <div>Error: {error.message}</div>}
     </form>
   );
 }
