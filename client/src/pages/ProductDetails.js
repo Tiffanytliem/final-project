@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { fetchProduct } from '../lib/api';
 import { Link, useParams } from 'react-router-dom';
 import '../styles.css';
 import Footer from '../components/Footer';
+import AppContext from '../components/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -11,6 +13,8 @@ export default function ProductDetails() {
   const [product, setProduct] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
+  const { user } = useContext(AppContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadProduct(productId) {
@@ -27,6 +31,11 @@ export default function ProductDetails() {
     loadProduct(productId);
   }, [productId]);
 
+  function handleAddToCart() {
+    if (!user) {
+      navigate('/account');
+    }
+  }
   if (isLoading) return <div>Loading...</div>;
   if (error) {
     return (
@@ -68,7 +77,9 @@ export default function ProductDetails() {
               <p className="detail-price">{price}</p>
             </div>
             <div className="row">
-              <button className="add-to-cart">Add to Cart</button>
+              <button onClick={handleAddToCart} className="add-to-cart">
+                Add to Cart
+              </button>
             </div>
             <div className="row">
               <p className="detail-desc">{description}</p>

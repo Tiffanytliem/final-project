@@ -213,6 +213,10 @@ button:hover,
   margin-bottom: 48vh;
 }
 
+.errorMsg {
+  color: red;
+}
+
 @media only screen and (width >540px) {
   .mobile-intro {
     display: none;

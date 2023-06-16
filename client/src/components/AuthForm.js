@@ -6,7 +6,7 @@ import '../styles.css';
 export default function AuthForm({ action, onSignIn }) {
   const navigate = useNavigate();
   const [error, setError] = useState();
-
+  console.log(action);
   async function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -54,13 +54,19 @@ export default function AuthForm({ action, onSignIn }) {
       </div>
       <div>
         <button className="auth-form-submit-button">{submitButtonText}</button>
+        {error && (
+          <div className="errorMsg">
+            {action === 'sign-up'
+              ? 'This email is already registered'
+              : 'Incorrect email or password'}
+          </div>
+        )}
         <small>
           <Link className="alternateAction" to={alternateActionTo}>
             {alternateActionText}
           </Link>
         </small>
       </div>
-      {error && <div>Error: {error.message}</div>}
     </form>
   );
 }

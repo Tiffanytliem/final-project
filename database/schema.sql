@@ -21,7 +21,7 @@ CREATE TABLE "public"."Products" (
 
 CREATE TABLE "public"."Users" (
 	"userId" serial NOT NULL,
-	"emailAddress" TEXT NOT NULL,
+	"emailAddress" TEXT NOT NULL UNIQUE,
 	"hashedPassword" TEXT NOT NULL,
 	CONSTRAINT "Users_pk" PRIMARY KEY ("userId")
 ) WITH (
