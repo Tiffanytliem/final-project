@@ -1,7 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
+import argon2 from 'argon2';
 import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
+import jwt from 'jsonwebtoken';
+import ClientError from './lib/client-error.js';
 
 // eslint-disable-next-line no-unused-vars -- Remove when used
 const db = new pg.Pool({
@@ -33,40 +36,112 @@ app.get('/api/products', async (req, res, next) => {
         "Products"."productId",
         "Products"."name",
         "Products"."price",
-        "Images"."image"
+        ARRAY_AGG("Images"."image" ORDER BY "Images"."imageId") AS images
       FROM
         "Products"
       JOIN
         "Images"
       USING
-        ("productId");
+        ("productId")
+      GROUP BY
+        "Products"."productId",
+        "Products"."name",
+        "Products"."price";
     `;
     const result = await db.query(sql);
-
-    // post-processing
-    const productMap = {};
-    result.rows.forEach((row) => {
-      // if the product is not yet in the map, add it
-      if (!productMap[row.name]) {
-        productMap[row.name] = {
-          productId: row.productId,
-          name: row.name,
-          price: row.price,
-          images: [row.image],
-        };
-      }
-      // otherwise, just append the image
-      else {
-        productMap[row.name].images.push(row.image);
-      }
-    });
-    // convert map to array
-    const productsArray = Object.values(productMap);
-    res.json(productsArray);
+    res.json(result.rows);
   } catch (err) {
     next(err);
   }
 });
+
+app.get('/api/products/:productId', async(req, res,next) => {
+  const productId = Number(req.params.productId);
+  try {
+    const sql = `
+      SELECT
+        "Products"."productId",
+        "Products"."name",
+        "Products"."price",
+        "Products"."description",
+        ARRAY_AGG("Images"."image" ORDER BY "Images"."imageId") AS images
+      FROM
+        "Products"
+      JOIN
+        "Images"
+      USING
+        ("productId")
+      WHERE
+        "productId" = $1
+      GROUP BY
+        "Products"."productId",
+        "Products"."name",
+        "Products"."price",
+        "Products"."description"
+    `;
+    const result = await db.query(sql, [productId]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/auth/sign-up', async (req, res, next) => {
+  try {
+    const {email, password} = req.body;
+    if (!email || !password) {
+      throw new ClientError(400, 'All fields are required');
+    }
+    const sql = `
+      insert into "Users"
+           ("emailAddress", "hashedPassword")
+          values ($1, $2)
+          returning *
+          `;
+
+    const hash = await argon2.hash(password);
+    const result = await db.query (sql, [email, hash]);
+    res.status(201).json(result.rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/auth/sign-in', async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new ClientError(401, 'invalid login');
+    }
+    const sql = `
+      select "userId",
+            "hashedPassword"
+        from "Users"
+        where "emailAddress" = $1
+    `;
+    const params = [email];
+    const result = await db.query(sql, params);
+    const [user] = result.rows;
+    if (!user) {
+      throw new ClientError(401, 'invalid login');
+    }
+    const { userId, hashedPassword } = user;
+    const isMatching = await argon2.verify(hashedPassword, password);
+    console.log(hashedPassword);
+    console.log(await argon2.hash('password'));
+    if (!isMatching) {
+      throw new ClientError(401, 'wrong password');
+
+    }
+    const payload = { userId, email };
+    const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+    res.json({ token, user: payload });
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 /**
  * Serves React's index.html if no api route matches.
  *

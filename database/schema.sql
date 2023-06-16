@@ -21,11 +21,8 @@ CREATE TABLE "public"."Products" (
 
 CREATE TABLE "public"."Users" (
 	"userId" serial NOT NULL,
-	"firstName" TEXT NOT NULL,
-	"lastName" TEXT NOT NULL,
-	"emailAddress" TEXT NOT NULL,
+	"emailAddress" TEXT NOT NULL UNIQUE,
 	"hashedPassword" TEXT NOT NULL,
-	"cartId" int NOT NULL,
 	CONSTRAINT "Users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE

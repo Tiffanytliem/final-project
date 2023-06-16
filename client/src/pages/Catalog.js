@@ -24,7 +24,7 @@ export default function Catalog() {
   return (
     <div>
       <div className="container">
-        <div className="row mobile">
+        <div className="row mobile-intro">
           <div className="catalog-intro column-full">
             <p className="shop-all">Shop All</p>
             <br />
