@@ -1,11 +1,8 @@
 import '../styles.css';
 import { Link, Outlet } from 'react-router-dom';
-import React, { useContext } from 'react';
-import AppContext from '../components/AppContext.js';
-
+import React from 'react';
 
 export default function Header(props) {
-  const {user, handleSignOut} = useContext(AppContext);
   console.log(props);
   return (
     <div>
@@ -19,19 +16,11 @@ export default function Header(props) {
         <Link to="/about">
           <span className="nav-item nav-icon desktop about">About</span>
         </Link>
-        <div>
-        {user &&
-              <button onClick={handleSignOut}>
-                Sign out
-              </button>
-            }
-        {!user &&
-        <>
-          <Link to="/sign-in">Sign In</Link>
-          <Link to="/sign-up">Sign Up</Link>
-        </>
-        }
-        </div>
+        <Link to="/account">
+          <span className="nav-item nav-icon">
+            <i class="bi bi-person"></i>
+          </span>
+        </Link>
         <Link to="/cart">
           <span className="nav-item nav-icon">
             <i class="bi bi-bag"></i>

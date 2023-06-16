@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router-dom';
 export default function Footer(props) {
   console.log(props);
   return (
-    <div className="footer-container">
+    <footer className="footer-container">
       <div className="footer">
         <Link to="/about" className="footer-item">
           <p>About</p>
@@ -17,6 +17,6 @@ export default function Footer(props) {
         </Link>
       </div>
       <Outlet></Outlet>
-    </div>
+    </footer>
   );
 }

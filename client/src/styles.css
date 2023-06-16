@@ -157,12 +157,13 @@ a:link {
   display: block;
   width: 330px;
   margin: auto;
+  margin-bottom: 18vh;
 }
 
 .welcomeMessage {
   text-align: center;
   font-size: 35px;
-  margin-top: 20vh;
+  margin-top: 25vh;
   margin-bottom: 15px;
 }
 
@@ -189,13 +190,27 @@ a:link {
   background-color: rgba(247, 236, 222, 1);
 }
 
-button:hover {
-  cursor: pointer;
-}
-
 .alternateAction {
   font-size: 20px;
   color: #dcb985;
+}
+
+.actionLink {
+  color: #dcb985;
+}
+
+button:hover,
+.actionLink:hover {
+  cursor: pointer;
+}
+
+.Account {
+  margin: 30vh auto;
+  text-align: center;
+  font-size: 25px;
+  width: 244px;
+  line-height: 35px;
+  margin-bottom: 48vh;
 }
 
 @media only screen and (width >540px) {
