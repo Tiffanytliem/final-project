@@ -153,6 +153,51 @@ a:link {
   margin: 20px 0;
 }
 
+.signin-signup-Form {
+  display: block;
+  width: 330px;
+  margin: auto;
+}
+
+.welcomeMessage {
+  text-align: center;
+  font-size: 35px;
+  margin-top: 20vh;
+  margin-bottom: 15px;
+}
+
+.emailInput,
+.passwordInput,
+.auth-form-submit-button {
+  width: 100%;
+  border: solid #ced4da 0.5px;
+  color: inherit;
+  height: 38px;
+  font-family: inherit;
+  font-size: 25px;
+  margin: 15px auto;
+  padding-left: 12px;
+}
+
+::placeholder {
+  color: #abb5be;
+}
+
+.auth-form-submit-button {
+  border: none;
+  height: 48px;
+  background-color: rgba(247, 236, 222, 1);
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.alternateAction {
+  font-size: 20px;
+  color: #dcb985;
+}
+
 @media only screen and (width >540px) {
   .mobile-intro {
     display: none;

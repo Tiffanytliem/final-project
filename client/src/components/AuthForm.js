@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUpOrIn } from '../lib/api';
+import '../styles.css';
 
 export default function AuthForm({ action, onSignIn }) {
   const navigate = useNavigate();
@@ -22,45 +23,42 @@ export default function AuthForm({ action, onSignIn }) {
     }
   }
 
-  const alternateActionTo = action === 'sign-up'
-    ? '/sign-in'
-    : '/sign-up';
-  const alternateActionText = action === 'sign-up'
-    ? 'Sign in instead'
-    : 'Register now';
-  const submitButtonText = action === 'sign-up'
-    ? 'Register'
-    : 'Log In';
+  const alternateActionTo = action === 'sign-up' ? '/sign-in' : '/sign-up';
+  const alternateActionText =
+    action === 'sign-up' ? 'Log in instead' : 'Create account';
+  const submitButtonText = action === 'sign-up' ? 'Register' : 'Log In';
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="signin-signup-Form" onSubmit={handleSubmit}>
       <div>
         <label>
-          Email:
           <input
+            className="emailInput"
             required
             autoFocus
             type="text"
-            name="email" />
+            name="email"
+            placeholder="Email"
+          />
         </label>
       </div>
       <div>
         <label>
-          Password:
           <input
+            className="passwordInput"
             required
             type="password"
-            name="password" />
+            name="password"
+            placeholder="Password"
+          />
         </label>
       </div>
       <div>
+        <button className="auth-form-submit-button">{submitButtonText}</button>
         <small>
-          <Link to={alternateActionTo}>
+          <Link className="alternateAction" to={alternateActionTo}>
             {alternateActionText}
           </Link>
         </small>
-        <button>
-          {submitButtonText}
-        </button>
       </div>
       {error && <div>Error: {error.message}</div>}
     </form>
