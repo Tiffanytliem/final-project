@@ -16,6 +16,8 @@ export default function ProductDetails() {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
+  console.log(product);
+
   useEffect(() => {
     async function loadProduct(productId) {
       try {
@@ -31,11 +33,23 @@ export default function ProductDetails() {
     loadProduct(productId);
   }, [productId]);
 
-  function handleAddToCart() {
+  async function handleAddToCart() {
+    console.log(product);
     if (!user) {
       navigate('/account');
     }
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({product, user})
+    };
+    const res = await fetch('/api/cart-items',req);
+    console.log(res);
+
   }
+
   if (isLoading) return <div>Loading...</div>;
   if (error) {
     return (

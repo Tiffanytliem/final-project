@@ -12,13 +12,13 @@ export default function Account() {
       <div className="Account">
         {user && (
           <div>
-            <p> User: {user.email}</p>
+            <p> Hello! {user.email}</p>
+            <p className="actionLink">View Orders</p>
+            <br />
+            <br />
             <p className="actionLink signout" onClick={handleSignOut}>
               Logout
             </p>
-            <br />
-            <br />
-            <p className="actionLink">Orders</p>
           </div>
         )}
         {!user && (

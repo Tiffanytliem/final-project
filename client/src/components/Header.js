@@ -5,7 +5,9 @@ import AppContext from '../components/AppContext';
 
 export default function Header(props) {
   const { user } = useContext(AppContext);
-  console.log(props);
+  function handleCartClick(){
+    console.log('cart clicked');
+  }
   return (
     <div>
       <div className="navbar">
@@ -31,11 +33,13 @@ export default function Header(props) {
             </span>
           </Link>
         )}
-        <Link to="/cart">
+        <div onClick={handleCartClick}>
+        {/* <Link to="/cart"> */}
           <span className="nav-item nav-icon">
             <i class="bi bi-bag"></i>
           </span>
-        </Link>
+        {/* </Link> */}
+        </div>
         {/* <hr class="top-hr" /> */}
       </div>
       {/* Render the Outlet here. */}
