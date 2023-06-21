@@ -20,7 +20,7 @@ function Cart() {
       }
     };
     fetchCartItems();
-  }); // empty dependency array so this runs once on mount
+  }, [user.userId]); // use user.userId as dependency
 
   function handleSubtractQuantity() {
     console.log('Quantity subtracted');
@@ -30,9 +30,11 @@ function Cart() {
     console.log('Quantity added');
   }
 
+  const subtotal = items.length > 0 ? items[0].totalCartPrice.toFixed(2) : 0;
+
   return (
     <div className="cart-modal show">
-      <span class="bi bi-x"></span>
+      <span className="bi bi-x"></span>
       <br />
       <br />
       <p className="cart-title">Cart</p>
@@ -69,9 +71,7 @@ function Cart() {
         </div>
       ))}
 
-      {items.map((item) => (
-        <p>Subtotal: ${item.totalCartPrice.toFixed(2)}</p>
-      ))}
+      <p>Subtotal: ${subtotal}</p>
     </div>
   );
 }

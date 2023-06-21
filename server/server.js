@@ -159,98 +159,65 @@ app.post('/api/:userId/cart', async (req, res, next) => {
 });
 
 app.post('/api/cart-items', async (req, res, next) => {
-  // console.log(req.body.product);
-  console.log(req.body);
   const { productId, images, name, price } = req.body.product;
   const { userId } = req.body.user;
   const image = images[0];
-  const quantity = 1;
-  // const cartId = 1;
-  const totalPrice = price * quantity;
-
   const cartId = await getOrCreateCart(userId);
 
-  async function getOrCreateCart(userId) {
-    // Start a transaction
-    await db.query('BEGIN');
-
-    try {
-      // Check for an existing cart not associated with any order
-      let sql = `
-      SELECT "Carts"."cartId"
-      FROM "Carts"
-      LEFT JOIN "Orders"
-      ON "Carts"."cartId" = "Orders"."cartId"
-      WHERE "Carts"."userId" = $1
-      AND "Orders"."cartId" IS NULL;
-    `;
-      const params = [userId];
-      let result = await db.query(sql, params);
-
-      if (result.rows.length) {
-        // If a cart exists, return it
-        return result.rows[0].cartId;
-      } else {
-        // Otherwise, create a new cart
-
-        sql = `
-        INSERT INTO "Carts" ("userId", "totalCartPrice")
-        VALUES ($1, 0)
-        RETURNING "cartId";
-      `;
-
-        result = await db.query(sql, params);
-
-        // Commit the transaction
-        await db.query('COMMIT');
-
-        // Return the newly created cart
-        return result.rows[0].cartId;
-      }
-    } catch (err) {
-      // Rollback the transaction in case of any errors
-      await db.query('ROLLBACK');
-      throw err;
-    }
-  }
-
   try {
-    const sql = `
-      INSERT INTO "Cart Items"
-      ("productId", "cartId", "image", "name", "quantity", "price", "totalPrice")
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *;
+    let sql = `
+      SELECT *
+      FROM "Cart Items"
+      WHERE "cartId" = $1 AND "productId" = $2
     `;
-    const params = [
-      productId,
-      cartId,
-      image,
-      name,
-      quantity,
-      price,
-      totalPrice,
-    ];
-    const result = await db.query(sql, params);
-    res.status(201).json(result.rows);
-
-    console.log(params);
-    // Get the current totalCartPrice
+    const params = [cartId, productId];
+    let result = await db.query(sql, params);
+    if (result.rows.length) {
+      // Cart item for the product exists, update quantity and totalPrice
+      const cartItem = result.rows[0];
+      const quantity = cartItem.quantity + 1;
+      const totalPrice = price * quantity;
+      sql = `
+        UPDATE "Cart Items"
+        SET "quantity" = $1, "totalPrice" = $2
+        WHERE "cartId" = $3 AND "productId" = $4
+        RETURNING *;
+      `;
+      const params = [quantity, totalPrice, cartId, productId];
+      result = await db.query(sql, params);
+    } else {
+      // Cart item for the product does not exist, insert new cart item
+      const quantity = 1;
+      const totalPrice = price * quantity;
+      sql = `
+        INSERT INTO "Cart Items"
+        ("productId", "cartId", "image", "name", "quantity", "price", "totalPrice")
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *;
+      `;
+      const params = [
+        productId,
+        cartId,
+        image,
+        name,
+        quantity,
+        price,
+        totalPrice,
+      ];
+      result = await db.query(sql, params);
+    }
+    // Update the totalCartPrice in the Carts table
     const sql2 = `
       SELECT "totalCartPrice"
       FROM "Carts"
       WHERE "cartId" = $1
       `;
     const result2 = await db.query(sql2, [cartId]);
-
-    // Add the totalPrice of the new item to the current totalCartPrice
-    const newTotalCartPrice = result2.rows[0].totalCartPrice + totalPrice;
-    console.log(newTotalCartPrice);
-
+    const newTotalCartPrice =
+      result2.rows[0].totalCartPrice + result.rows[0].totalPrice;
     if (isNaN(newTotalCartPrice)) {
       throw new ClientError(400, 'Total price calculation error');
     }
-
-    // Update the totalCartPrice in the Carts table
     const sql3 = `
       UPDATE "Carts"
       SET "totalCartPrice" = $1
@@ -258,7 +225,7 @@ app.post('/api/cart-items', async (req, res, next) => {
       RETURNING *;
       `;
     const result3 = await db.query(sql3, [newTotalCartPrice, cartId]);
-    console.log(result3);
+    res.status(201).json({ cartItem: result.rows[0], cart: result3.rows[0] });
   } catch (err) {
     next(err);
   }
@@ -280,6 +247,45 @@ app.get('/api/carts/:userId/items', async (req, res, next) => {
     next(err);
   }
 });
+
+async function getOrCreateCart(userId) {
+  // Start a transaction
+  await db.query('BEGIN');
+  try {
+    // Check for an existing cart not associated with any order
+    let sql = `
+    SELECT "Carts"."cartId"
+    FROM "Carts"
+    LEFT JOIN "Orders"
+    ON "Carts"."cartId" = "Orders"."cartId"
+    WHERE "Carts"."userId" = $1
+    AND "Orders"."cartId" IS NULL;
+    `;
+    const params = [userId];
+    let result = await db.query(sql, params);
+    if (result.rows.length) {
+      // If a cart exists, return it
+      await db.query('COMMIT');
+      return result.rows[0].cartId;
+    } else {
+      // Otherwise, create a new cart
+      sql = `
+      INSERT INTO "Carts" ("userId", "totalCartPrice")
+      VALUES ($1, 0)
+      RETURNING "cartId";
+    `;
+      result = await db.query(sql, params);
+      // Commit the transaction
+      await db.query('COMMIT');
+      // Return the newly created cart
+      return result.rows[0].cartId;
+    }
+  } catch (err) {
+    // Rollback the transaction in case of any errors
+    await db.query('ROLLBACK');
+    throw err;
+  }
+}
 
 // app.get('/api/:userId/orders', async(req,res,next) => {
 //   const userId = Number(req.params.userId);

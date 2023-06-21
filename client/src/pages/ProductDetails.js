@@ -35,6 +35,7 @@ export default function ProductDetails() {
 
   async function handleAddToCart() {
     console.log(product);
+    console.log(user);
     if (!user) {
       navigate('/account');
     }
