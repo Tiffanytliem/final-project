@@ -74,7 +74,7 @@ function Product({ product }) {
         <img src={image} className="image" alt={name} />
         <div className="card-body">
           <p>{name}</p>
-          <p className="card-price">{price}</p>
+          <p className="card-price">${price.toFixed(2)}</p>
         </div>
       </div>
     </Link>

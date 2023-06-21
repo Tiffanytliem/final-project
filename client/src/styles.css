@@ -217,6 +217,63 @@ button:hover,
   color: red;
 }
 
+.cart-modal {
+  position: absolute;
+  width: 340px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #fbf9f7;
+}
+
+.cart-title {
+  text-align: center;
+  font-size: 22px;
+}
+
+.cart-column-image {
+  flex-basis: 31%;
+}
+
+.cart-column-name {
+  flex-basis: 34%;
+}
+
+.cart-image {
+  width: 100%;
+}
+
+.cart-row {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 25px 0;
+  font-size: 17px;
+}
+
+.cart-column-fourth {
+  flex-basis: 17%;
+}
+
+.row-quantity {
+  border: black solid 0.1px;
+  height: 36px;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: auto;
+}
+
+.column-third {
+  flex-basis: 33%;
+  text-align: center;
+  padding: 7px 0;
+}
+
+.bi.bi-x {
+  margin-left: 300px;
+  font-size: 40px;
+  margin-top: 10px;
+}
+
 @media only screen and (width >540px) {
   .mobile-intro {
     display: none;

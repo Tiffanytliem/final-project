@@ -41,13 +41,12 @@ export default function ProductDetails() {
     const req = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({product, user})
+      body: JSON.stringify({ product, user }),
     };
-    const res = await fetch('/api/cart-items',req);
+    const res = await fetch('/api/cart-items', req);
     console.log(res);
-
   }
 
   if (isLoading) return <div>Loading...</div>;
@@ -88,7 +87,7 @@ export default function ProductDetails() {
               <p className="detail-title">{name}</p>
             </div>
             <div className="row">
-              <p className="detail-price">{price}</p>
+              <p className="detail-price">${price.toFixed(2)}</p>
             </div>
             <div className="row">
               <button onClick={handleAddToCart} className="add-to-cart">

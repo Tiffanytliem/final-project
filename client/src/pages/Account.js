@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm.js';
 import AppContext from '../components/AppContext.js';
 import '../styles.css';
 import Footer from '../components/Footer';

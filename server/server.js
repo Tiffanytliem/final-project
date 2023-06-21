@@ -140,7 +140,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
   }
 });
 
-app.post('/api/:userId/carts', async (req, res, next) => {
+app.post('/api/:userId/cart', async (req, res, next) => {
   const { userId, totalCartPrice } = req.body;
   try {
     const sql = `
@@ -231,8 +231,9 @@ app.post('/api/cart-items', async (req, res, next) => {
       totalPrice,
     ];
     const result = await db.query(sql, params);
-    res.status(201).json(result.rows[0]);
+    res.status(201).json(result.rows);
 
+    console.log(params);
     // Get the current totalCartPrice
     const sql2 = `
       SELECT "totalCartPrice"
@@ -267,7 +268,7 @@ app.get('/api/carts/:userId/items', async (req, res, next) => {
   const userId = Number(req.params.userId);
   try {
     const sql = `
-      SELECT "Cart Items".*
+      SELECT "Cart Items".*, "totalCartPrice"
       FROM "Carts"
       JOIN "Cart Items"
       ON "Carts"."cartId" = "Cart Items"."cartId"
