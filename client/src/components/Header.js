@@ -1,13 +1,17 @@
 import '../styles.css';
 import { Link, Outlet } from 'react-router-dom';
-import { React, useContext } from 'react';
+import { React, useContext, useState } from 'react';
 import AppContext from '../components/AppContext';
+import Cart from '../components/Cart';
 
 export default function Header(props) {
   const { user } = useContext(AppContext);
-  function handleCartClick() {
-    console.log('cart clicked');
+  let [showCart, setShowCart] = useState(false);
+  function handleCartClicked() {
+    console.log('Cart Clicked');
+    setShowCart(true);
   }
+
   return (
     <div>
       <div className="navbar">
@@ -33,13 +37,11 @@ export default function Header(props) {
             </span>
           </Link>
         )}
-
-        <div onClick={handleCartClick}>
-          <Link to="/cart">
-            <span className="nav-item nav-icon">
-              <i class="bi bi-bag"></i>
-            </span>
-          </Link>
+        <div onClick={handleCartClicked}>
+          <span className="nav-item nav-icon">
+            <i class="bi bi-bag"></i>
+          </span>
+          <div className="cart-container">{showCart === true && <Cart />}</div>
         </div>
         {/* <hr class="top-hr" /> */}
       </div>

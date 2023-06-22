@@ -4,6 +4,7 @@ import '../styles.css';
 
 function Cart() {
   const [items, setItems] = useState([]);
+  const [showCart, setShowCart] = useState(true);
   const { user } = useContext(AppContext);
 
   useEffect(() => {
@@ -32,10 +33,13 @@ function Cart() {
 
   const subtotal = items.length > 0 ? items[0].totalCartPrice.toFixed(2) : 0;
 
+  if (!showCart) {
+    return null;
+  }
+
   return (
-    <div className="cart-modal show">
-      <span className="bi bi-x"></span>
-      <br />
+    <div className="cart-modal">
+      <span className="bi bi-x" onClick={() => setShowCart(false)}></span>
       <br />
       <p className="cart-title">Cart</p>
       <br />
@@ -70,9 +74,14 @@ function Cart() {
           </div>
         </div>
       ))}
+      <br />
+      <hr />
+      <p className="subtotal">Subtotal: ${subtotal}</p>
 
-      <p>Subtotal: ${subtotal}</p>
+      <button className="check-out">Check out </button>
+      <br />
     </div>
   );
 }
+
 export default Cart;

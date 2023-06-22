@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 
 export default function Account() {
   const { user, handleSignOut } = useContext(AppContext);
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className="Account">

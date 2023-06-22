@@ -5,6 +5,7 @@ import '../styles.css';
 import Footer from '../components/Footer';
 import AppContext from '../components/AppContext';
 import { useNavigate } from 'react-router-dom';
+import Cart from '../components/Cart';
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -12,11 +13,10 @@ export default function ProductDetails() {
   console.log(productId);
   const [product, setProduct] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [showCart, setShowCart] = useState(false);
   const [error, setError] = useState();
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
-
-  console.log(product);
 
   useEffect(() => {
     async function loadProduct(productId) {
@@ -34,20 +34,19 @@ export default function ProductDetails() {
   }, [productId]);
 
   async function handleAddToCart() {
-    console.log(product);
-    console.log(user);
     if (!user) {
       navigate('/account');
+    } else {
+      const req = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ product, user }),
+      };
+      await fetch('/api/cart-items', req);
+      setShowCart(true);
     }
-    const req = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ product, user }),
-    };
-    const res = await fetch('/api/cart-items', req);
-    console.log(res);
   }
 
   if (isLoading) return <div>Loading...</div>;
@@ -101,6 +100,7 @@ export default function ProductDetails() {
           </div>
         </div>
       </div>
+      <div className="cart-container">{showCart === true && <Cart />}</div>
       <div className="row hr-footer">
         <Footer />
       </div>
