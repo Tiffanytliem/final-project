@@ -37,15 +37,19 @@ export default function Header(props) {
             </span>
           </Link>
         )}
-        <div onClick={handleCartClicked}>
+        <div>
           <span className="nav-item nav-icon">
-            <i class="bi bi-bag"></i>
+            <i class="bi bi-bag" onClick={handleCartClicked}></i>
           </span>
-          <div className="cart-container">{showCart === true && <Cart />}</div>
         </div>
-        {/* <hr class="top-hr" /> */}
       </div>
-      {/* Render the Outlet here. */}
+      <div className="cart-container">
+        {showCart ? (
+          <Cart onClose={() => setShowCart(false)} />
+        ) : (
+          console.log('Close cart')
+        )}
+      </div>
       <Outlet></Outlet>
     </div>
   );

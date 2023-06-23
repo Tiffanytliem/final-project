@@ -61,6 +61,14 @@ export default function ProductDetails() {
   const { name, images, price, description } = product;
   return (
     <div>
+      <div className="cart-container">
+        {showCart ? (
+          <Cart onClose={() => setShowCart(false)} />
+        ) : (
+          console.log('Close cart')
+        )}
+      </div>
+
       <div className="container">
         <div className="row">
           <div className="img-col-2-thrd">
@@ -100,7 +108,6 @@ export default function ProductDetails() {
           </div>
         </div>
       </div>
-      <div className="cart-container">{showCart === true && <Cart />}</div>
       <div className="row hr-footer">
         <Footer />
       </div>

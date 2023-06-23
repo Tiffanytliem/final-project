@@ -206,7 +206,8 @@ a:link {
 }
 
 button:hover,
-.actionLink:hover {
+.actionLink:hover,
+.bi:hover {
   cursor: pointer;
 }
 
@@ -224,11 +225,12 @@ button:hover,
 }
 
 .cart-modal {
+  z-index: 30;
   position: absolute;
   width: 340px;
   right: 0;
   top: 0;
-  bottom: 0;
+  height: auto;
   background-color: #fbf9f7;
 }
 

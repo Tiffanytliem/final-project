@@ -231,6 +231,33 @@ app.post('/api/cart-items', async (req, res, next) => {
   }
 });
 
+app.put('/api/cart-items', async (req, res, next) => {
+  console.log('End point hit');
+  const { cartId, itemId, price } = req.body.cartItem;
+  const quantity = req.body.quantity;
+  const totalPrice = price * quantity;
+
+  console.log('Quantity:', typeof quantity);
+
+  try {
+    const sql = `
+      UPDATE "Cart Items"
+      SET "quantity" = $1, "totalPrice" = $2
+      WHERE "cartId" = $3 AND "itemId" = $4
+      RETURNING *;
+      `;
+    const result = await db.query(sql, [
+      parseInt(quantity),
+      totalPrice,
+      cartId,
+      itemId,
+    ]);
+    res.json(result.rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.get('/api/carts/:userId/items', async (req, res, next) => {
   const userId = Number(req.params.userId);
   try {
@@ -239,7 +266,8 @@ app.get('/api/carts/:userId/items', async (req, res, next) => {
       FROM "Carts"
       JOIN "Cart Items"
       ON "Carts"."cartId" = "Cart Items"."cartId"
-      WHERE "Carts"."userId" = $1;
+      WHERE "Carts"."userId" = $1
+      ORDER BY "itemId" desc;
     `;
     const result = await db.query(sql, [userId]);
     res.json(result.rows);
