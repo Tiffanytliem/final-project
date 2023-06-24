@@ -4,7 +4,6 @@ import '../styles.css';
 
 function Cart({ onClose }) {
   const [items, setItems] = useState([]);
-  const [itemQuantity, setItemQuantity] = useState(0);
   const { user } = useContext(AppContext);
   const [cartChange, setCartChange] = useState(false);
 
@@ -28,9 +27,7 @@ function Cart({ onClose }) {
 
   async function handleReduceQuantity(item) {
     let cartItem = items.find((element) => element.itemId === item.itemId);
-    console.log(cartItem);
     let quantity = cartItem.quantity - 1;
-    console.log(quantity);
     const req = {
       method: 'PUT',
       headers: {
@@ -57,6 +54,20 @@ function Cart({ onClose }) {
     await fetch('/api/cart-items', req);
     setCartChange(!cartChange);
   }
+
+  // useEffect(() => {
+  //   let updateCartPrice = async () => {
+  //     const req = {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ cartId, totalCartPrice }),
+  //   };
+  //   await fetch('/api/cart-items', req);
+  //   setCartChange(!cartChange);
+  //   }
+  // })
 
   const subtotal = items.length > 0 ? items[0].totalCartPrice.toFixed(2) : 0;
 
@@ -89,7 +100,7 @@ function Cart({ onClose }) {
             </div>
             <div className="row-quantity">
               <p
-                className="column-third"
+                className="column-third symbol"
                 onClick={() => {
                   handleReduceQuantity(item);
                 }}>
@@ -97,7 +108,7 @@ function Cart({ onClose }) {
               </p>
               <p className="column-third">{item.quantity}</p>
               <p
-                className="column-third"
+                className="column-third symbol"
                 onClick={() => {
                   handleAddQuantity(item);
                 }}>
@@ -114,7 +125,7 @@ function Cart({ onClose }) {
       <hr />
       <p className="subtotal">Subtotal: ${totalCartPrice2.toFixed(2)}</p>
 
-      <button className="check-out">Check out </button>
+      <button className="check-out">Check out</button>
       <br />
     </div>
   );

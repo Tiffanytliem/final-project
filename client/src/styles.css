@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  caret-color: transparent;
 }
 
 body {
@@ -207,6 +208,7 @@ a:link {
 
 button:hover,
 .actionLink:hover,
+.symbol:hover,
 .bi:hover {
   cursor: pointer;
 }

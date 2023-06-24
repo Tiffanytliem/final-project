@@ -25,10 +25,6 @@ app.use(express.static(reactStaticDir));
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello, World!' });
-});
-
 app.get('/api/products', async (req, res, next) => {
   try {
     const sql = `
@@ -140,7 +136,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
   }
 });
 
-app.post('/api/:userId/cart', async (req, res, next) => {
+app.post('/api/:userId/:cartId', async (req, res, next) => {
   const { userId, totalCartPrice } = req.body;
   try {
     const sql = `
@@ -238,23 +234,36 @@ app.put('/api/cart-items', async (req, res, next) => {
   const totalPrice = price * quantity;
 
   console.log('Quantity:', typeof quantity);
-
-  try {
-    const sql = `
+  if (quantity > 0) {
+    try {
+      const sql = `
       UPDATE "Cart Items"
       SET "quantity" = $1, "totalPrice" = $2
       WHERE "cartId" = $3 AND "itemId" = $4
       RETURNING *;
       `;
-    const result = await db.query(sql, [
-      parseInt(quantity),
-      totalPrice,
-      cartId,
-      itemId,
-    ]);
-    res.json(result.rows[0]);
-  } catch (err) {
-    next(err);
+      const result = await db.query(sql, [
+        parseInt(quantity),
+        totalPrice,
+        cartId,
+        itemId,
+      ]);
+      res.json(result.rows[0]);
+    } catch (err) {
+      next(err);
+    }
+  } else {
+    try {
+      const sql = `
+      DELETE FROM "Cart Items"
+      WHERE "cartId" = $1 AND "itemId" = $2
+      RETURNING *;
+      `;
+      const result = await db.query(sql, [cartId, itemId]);
+      res.json(result.rows[0]);
+    } catch (err) {
+      next(err);
+    }
   }
 });
 
