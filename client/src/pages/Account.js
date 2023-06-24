@@ -1,24 +1,25 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AuthForm from '../components/AuthForm.js';
 import AppContext from '../components/AppContext.js';
 import '../styles.css';
 import Footer from '../components/Footer';
 
 export default function Account() {
   const { user, handleSignOut } = useContext(AppContext);
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className="Account">
         {user && (
           <div>
-            <p> User: {user.email}</p>
+            <p> Hello! {user.email}</p>
+            <p className="actionLink">View Orders</p>
+            <br />
+            <br />
             <p className="actionLink signout" onClick={handleSignOut}>
               Logout
             </p>
-            <br />
-            <br />
-            <p className="actionLink">Orders</p>
           </div>
         )}
         {!user && (

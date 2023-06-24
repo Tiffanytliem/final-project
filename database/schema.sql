@@ -11,7 +11,7 @@ CREATE TABLE "public"."Products" (
 	"name" TEXT NOT NULL,
 	"description" TEXT NOT NULL,
 	"stock" int NOT NULL,
-	"price" money NOT NULL,
+	"price" int NOT NULL,
 	CONSTRAINT "Products_pk" PRIMARY KEY ("productId")
 ) WITH (
   OIDS=FALSE
@@ -33,7 +33,7 @@ CREATE TABLE "public"."Users" (
 CREATE TABLE "public"."Carts" (
 	"cartId" serial NOT NULL,
 	"userId" int NOT NULL,
-	"totalCartPrice" money NOT NULL,
+	"totalCartPrice" int NOT NULL,
 	CONSTRAINT "Carts_pk" PRIMARY KEY ("cartId")
 ) WITH (
   OIDS=FALSE
@@ -48,8 +48,8 @@ CREATE TABLE "public"."Cart Items" (
 	"image" TEXT NOT NULL,
 	"name" TEXT NOT NULL,
 	"quantity" int NOT NULL,
-	"price" money NOT NULL,
-	"totalPrice" money NOT NULL,
+	"price" int NOT NULL,
+	"totalPrice" int NOT NULL,
 	CONSTRAINT "Cart Items_pk" PRIMARY KEY ("itemId")
 ) WITH (
   OIDS=FALSE
